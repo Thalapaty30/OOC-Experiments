@@ -1,4 +1,4 @@
-#include <iostream>
+ #include <iostream>
 using namespace std;
 
 // Base class
@@ -8,32 +8,28 @@ protected:
     double price;
 
 public:
-    // Constructor
     Product(string n, double p) {
         name = n;
         price = p;
         cout << "Product created: " << name << endl;
     }
 
-    // Function (method) - can be overridden
     virtual double getPrice() {
         return price;
     }
 
-    // Destructor
     ~Product() {
         cout << "Product removed: " << name << endl;
     }
 };
 
-// Derived class - overriding getPrice()
+// Derived class
 class DiscountProduct : public Product {
     double discountPercent;
 public:
     DiscountProduct(string n, double p, double d)
         : Product(n, p), discountPercent(d) {}
 
-    // Overriding function
     double getPrice() override {
         return price - (price * discountPercent / 100);
     }
@@ -44,28 +40,36 @@ double calculateBill(double price) {
     return price;
 }
 
-double calculateBill(double price, int qty) {
-    return price * qty;
-}
-
 int main() {
-    // Object creation
-    Product p("USB Cable", 200);
-    DiscountProduct dp("Bluetooth Speaker", 1500, 10);  // 10% discount
+    string productName;
+    double price = 0;
+    double discount = 10;   // fixed 10% discount
 
+    cout << "Enter product name: ";
+    cin >> productName;
+
+    // Product price database (you can add more)
+    if (productName == "USB") price = 200;
+    else if (productName == "Mouse") price = 450;
+    else if (productName == "Keyboard") price = 800;
+    else if (productName == "Charger") price = 350;
+    else {
+        cout << "Product not found!" << endl;
+        return 0;
+    }
+
+    // Create objects
+    Product p(productName, price);
+    DiscountProduct dp(productName, price, discount);
+
+    // Display output
     cout << "\n--- Bill Details ---\n";
-
-    double normalPrice = calculateBill(p.getPrice());
-    cout << "USB Cable: Rs." << normalPrice << endl;
-
-    double discountedPrice = calculateBill(dp.getPrice(), 2); // buying 2
-    cout << "Bluetooth Speaker (2 pcs with discount): Rs." 
-         << discountedPrice << endl;
+    cout << productName << " Original Price: Rs." << calculateBill(p.getPrice()) << endl;
+    cout << productName << " Discounted Price (" << discount << "% off): Rs."
+         << calculateBill(dp.getPrice()) << endl;
 
     cout << "\nThank you for shopping!" << endl;
+
     return 0;
 }
-
-
-
 
